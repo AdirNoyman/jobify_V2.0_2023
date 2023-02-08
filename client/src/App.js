@@ -1,7 +1,9 @@
+import LandingPage from './pages/LandingPage';
+
 function App() {
 	return (
-		<div className=''>
-			<h1>Jobify App</h1>
+		<div>
+			<LandingPage />
 		</div>
 	);
 }
