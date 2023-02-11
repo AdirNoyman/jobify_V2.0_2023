@@ -1,13 +1,14 @@
 import React from 'react';
-import logo from '../assets/images/logo.svg';
+import { Link } from 'react-router-dom';
 import mainImage from '../assets/images/main.svg';
 import Wrapper from '../assets/wrappers/LandingPage';
+import { Logo } from '../components/index';
 
 const LandingPage = () => {
 	return (
 		<Wrapper>
 			<nav>
-				<img src={logo} alt='jobify' className='logo'></img>
+				<Logo />
 			</nav>
 			<div className='container page'>
 				{/* info */}
@@ -21,7 +22,9 @@ const LandingPage = () => {
 						umami chicharrones literally Brooklyn man braid beard
 						hashtag pok pok hot chicken poutine direct trade.{' '}
 					</p>
-					<button class='btn btn-hero'>Login/Register</button>
+					<Link to='/register' class='btn btn-hero'>
+						Login/Register
+					</Link>
 				</div>
 				{/* end info */}
 				{/* image */}
