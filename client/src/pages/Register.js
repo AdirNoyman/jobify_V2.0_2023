@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, FormRow, Logo } from '../components';
 import Wrapper from '../assets/wrappers/RegisterPage';
+import { useAppContext } from '../context/appConetxt';
 
 const initialState = {
 	name: '',
 	email: '',
 	password: '',
 	isMember: true,
-	showAlert: false,
 };
 
 const Register = () => {
 	const [values, setValues] = useState(initialState);
-	const { name, email, password, showAlert, isMember } = values;
+	const { name, email, password, isMember } = values;
 	// Global state and useNavigate
+	const { isLoading, showAlert } = useAppContext();
 
 	// Toggle member / guest
 	const toggleMember = () => {
