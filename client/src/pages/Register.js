@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Logo } from '../components';
+import { Alert, FormRow, Logo } from '../components';
 import Wrapper from '../assets/wrappers/RegisterPage';
 
 const initialState = {
@@ -7,13 +7,18 @@ const initialState = {
 	email: '',
 	password: '',
 	isMember: true,
+	showAlert: false,
 };
 
 const Register = () => {
 	const [values, setValues] = useState(initialState);
-	const { name } = values;
-
+	const { name, email, password, showAlert, isMember } = values;
 	// Global state and useNavigate
+
+	// Toggle member / guest
+	const toggleMember = () => {
+		setValues({ ...values, isMember: !isMember });
+	};
 
 	const handleChange = e => {
 		console.log(e.target);
@@ -28,23 +33,46 @@ const Register = () => {
 		<Wrapper className='full-page'>
 			<form className='form' onSubmit={handleSubmit}>
 				<Logo />
-				<h3>Login</h3>
+				<h3>{isMember ? 'Login' : 'Register'}</h3>
+				{/* Alert Message */}
+				{showAlert && <Alert />}
+				{/* end Alert message*/}
 				{/* name input */}
-				<div className='form-row'>
-					<label htmlFor='name' className='form-label'>
-						name
-					</label>
-					<input
+				{!isMember && (
+					<FormRow
 						type='text'
-						value={name}
 						name='name'
-						onChange={handleChange}
-						className='form-input'
+						value={values.name}
+						handleChange={handleChange}
 					/>
-				</div>
+				)}
+				{/* email input */}
+				<FormRow
+					type='email'
+					name='email'
+					value={email}
+					handleChange={handleChange}
+				/>
+				{/* password input */}
+				<FormRow
+					type='password'
+					name='password'
+					value={password}
+					handleChange={handleChange}
+				/>
 				<button type='submit' className='btn btn-block'>
 					submit
 				</button>
+				<p>
+					{isMember ? 'Not a member yet?' : 'Already a member?'}
+
+					<button
+						type='button'
+						onClick={toggleMember}
+						className='member-btn'>
+						{isMember ? 'Register' : 'Login'}
+					</button>
+				</p>
 			</form>
 		</Wrapper>
 	);
