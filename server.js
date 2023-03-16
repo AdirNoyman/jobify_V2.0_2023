@@ -6,18 +6,26 @@ const app = express();
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Middleware
+// Authenticate User
+
+// routers
+import authRouter from './routes/authRoutes.js';
+import jobsRouter from './routes/jobsRoutes.js';
+
+// Middleware - load the json payload to the request body
+app.use(express.json());
 
 app.get('/', (req, res) => {
 	res.send('<h1>Welcome! 😎🤟</h1>');
 });
 
-app.get('*', (req, res) => {
-	res.send('Not found 🤨!');
-});
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/jobs', jobsRouter);
 
+// Middleware
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
+
 const port = process.env.PORT || 5000;
 
 const start = async () => {
