@@ -41,4 +41,9 @@ const UserSchema = new mongoose.Schema({
 	},
 });
 
+// Mongoose middleware function that will run before we save the document to the DB
+UserSchema.pre('save', function () {
+	console.log(this.password);
+});
+
 export default mongoose.model('User', UserSchema);
