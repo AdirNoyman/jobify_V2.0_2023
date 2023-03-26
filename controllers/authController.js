@@ -12,16 +12,22 @@ const register = async (req, res, next) => {
 	const userAlreadyExists = await User.findOne({ email });
 
 	if (userAlreadyExists) {
-		throw new BadRequestError('Email already in use 🤷🤨');
+		throw new BadRequestError('Email already in use 🤷 🤨');
 	}
 
 	// Create user
 	const user = await User.create({ name, email, password });
-	res.status(StatusCodes.CREATED).json({
-		msg: 'created user 🤓',
-		data: user,
+	const token = user.createJWT();
+	res.status(StatusCodes.OK).json({
+		user: {
+			email: user.email,
+			lastName: user.lastName,
+			location: user.location,
+			name: user.name,
+		},
+		token,
+		location: user.location,
 	});
-	user.save();
 };
 
 const login = async (req, res) => {

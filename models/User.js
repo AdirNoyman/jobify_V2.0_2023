@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import validator from 'validator';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
 const UserSchema = new mongoose.Schema({
 	name: {
 		type: String,
@@ -24,6 +27,8 @@ const UserSchema = new mongoose.Schema({
 		required: [true, 'Please provide a password 🤨'],
 		trim: true,
 		minlength: 6,
+		// Don't return the password in SELECT query and thus will not be returned in the response
+		select: false,
 	},
 	lastName: {
 		type: String,
@@ -41,9 +46,17 @@ const UserSchema = new mongoose.Schema({
 	},
 });
 
-// Mongoose middleware function that will run before we save the document to the DB
-UserSchema.pre('save', function () {
-	console.log(this.password);
+// Incrypt the user schema. Mongoose middleware function that will run before we save the document to the DB
+UserSchema.pre('save', async function () {
+	const salt = await bcrypt.genSalt(10);
+	this.password = await bcrypt.hash(this.password, salt);
 });
+
+// Create JWT
+UserSchema.methods.createJWT = function () {
+	return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
+		expiresIn: process.env.JWT_LIFETIME,
+	});
+};
 
 export default mongoose.model('User', UserSchema);
